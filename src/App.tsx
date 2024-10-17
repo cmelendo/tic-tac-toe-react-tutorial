@@ -1,7 +1,7 @@
-import Square from "./Square";
+import Board from "./Board";
 
 function App() {
-  return <Square />;
+  return <Board />;
 }
 
 export default App;
