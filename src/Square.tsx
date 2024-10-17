@@ -1,14 +1,13 @@
-import { useState } from "react";
+import type { Value } from "./Board";
 
-export default function Square() {
-  const [value, setValue] = useState("");
+type SquareProps = {
+  value: Value;
+  onSquareClick?: () => void;
+};
 
-  function handleClick() {
-    setValue("X");
-  }
-
+export default function Square({ value, onSquareClick }: SquareProps) {
   return (
-    <button className="square" onClick={handleClick}>
+    <button className="square" onClick={onSquareClick}>
       {value}
     </button>
   );
