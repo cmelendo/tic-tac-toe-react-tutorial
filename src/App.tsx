@@ -1,5 +1,7 @@
+import Square from "./Square";
+
 function App() {
-  return <div>Hello!</div>;
+  return <Square />;
 }
 
 export default App;
