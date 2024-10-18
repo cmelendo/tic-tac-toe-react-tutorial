@@ -9,9 +9,6 @@ export default function Board() {
   const [squares, setSquares] = useState<Value[]>(Array(9).fill(null));
 
   const winner = calculateWinner(squares);
-  const status = winner
-    ? "Winner: " + winner
-    : "Next player: " + (xIsNext ? "X" : "O");
 
   function handleClick(index: number) {
     if (squares[index] || winner) {
@@ -24,7 +21,9 @@ export default function Board() {
 
   return (
     <>
-      <div className="status">{status}</div>
+      <div className="status">
+        {winner ? "Winner: " + winner : "Next player: " + (xIsNext ? "X" : "O")}
+      </div>
       <BoardRow>
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
         <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
