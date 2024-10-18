@@ -5,10 +5,13 @@ import BoardRow from "./BoardRow";
 export type Value = "X" | "O" | null;
 
 export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
   const [squares, setSquares] = useState<Value[]>(Array(9).fill(null));
 
-  function handleClick(i: number) {
-    setSquares(squares.map((value, index) => (i === index ? "X" : value)));
+  function handleClick(index: number) {
+    const value = xIsNext ? "X" : "O";
+    setSquares(squares.map((v, i) => (i === index ? value : v)));
+    setXIsNext(!xIsNext);
   }
 
   return (
