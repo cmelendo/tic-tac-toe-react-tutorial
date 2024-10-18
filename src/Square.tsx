@@ -2,7 +2,7 @@ import type { Value } from "./Board";
 
 type SquareProps = {
   value: Value;
-  onSquareClick?: () => void;
+  onSquareClick: () => void;
 };
 
 export default function Square({ value, onSquareClick }: SquareProps) {
