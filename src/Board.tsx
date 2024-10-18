@@ -9,6 +9,9 @@ export default function Board() {
   const [squares, setSquares] = useState<Value[]>(Array(9).fill(null));
 
   function handleClick(index: number) {
+    if (squares[index]) {
+      return;
+    }
     const value = xIsNext ? "X" : "O";
     setSquares(squares.map((v, i) => (i === index ? value : v)));
     setXIsNext(!xIsNext);
