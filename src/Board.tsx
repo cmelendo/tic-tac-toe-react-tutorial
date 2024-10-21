@@ -2,6 +2,7 @@ import Square from "./Square";
 import BoardRow from "./BoardRow";
 import type { Squares, Value } from "./Game";
 import { calculateWinner } from "./utils/winner";
+import { useEffect, useState } from "react";
 
 type BoardProps = {
   rows: number;
@@ -22,6 +23,20 @@ export default function Board({
   onPlay,
   winner,
 }: BoardProps) {
+  const [timeLeft, setTimeLeft] = useState(10);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prevTimeLeft) => {
+        if (prevTimeLeft === 0) {
+          return 10;
+        }
+        return prevTimeLeft - 1;
+      });
+      return () => clearInterval(timer);
+    }, 1000);
+  }, [squares]);
+
   function handleClick(index: number) {
     if (squares[index] || winner) {
       return;
@@ -41,6 +56,8 @@ export default function Board({
     <>
       <div className="status">
         {winner ? "Winner: " + winner : "Next player: " + (xIsNext ? "X" : "O")}
+        <br />
+        Time left: {timeLeft}
       </div>
       {Array(rows)
         .fill(null)
