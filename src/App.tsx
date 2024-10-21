@@ -13,27 +13,19 @@ export type Config = {
 let gameNumber = 0;
 
 function App() {
-  const [config, setConfig] = useState<Config>({
-    gameName: `Game ${gameNumber}`,
-    rows: 3,
-    cols: 3,
-  });
-
   const [games, setGames] = useState<Config[]>([]);
 
-  const addGame = () => {
+  const addGame = (rows: number, cols: number) => {
     gameNumber++;
-    console.log(gameNumber);
-    setGames([...games, { ...config, gameName: `Game ${gameNumber}` }]);
+    setGames([...games, { rows, cols, gameName: `Game ${gameNumber}` }]);
   };
 
   return (
     <Menu>
       <MenuItem
+        key="config"
         title="Config"
-        component={
-          <Config config={config} setConfig={setConfig} addGame={addGame} />
-        }
+        component={<Config addGame={addGame} />}
       />
       {games.map((game) => (
         <MenuItem
