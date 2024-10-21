@@ -2,10 +2,12 @@ import { ReactNode, useState } from "react";
 import Board from "./Board";
 
 export type Value = "X" | "O" | null;
+export type Winner = Value | "Draw";
 export type Squares = Value[];
+
 type History = {
   squares: Squares;
-  winner: Value;
+  winner: Winner;
 }[];
 
 type GameProps = {
@@ -43,7 +45,7 @@ export default function Game({ rows, cols, target }: GameProps) {
     setCurrentMove(nextMove);
   }
 
-  function handlePlay(nextSquares: Squares, winner: Value) {
+  function handlePlay(nextSquares: Squares, winner: Winner) {
     const nextHistory = [
       ...history.slice(0, currentMove + 1),
       { squares: nextSquares, winner },

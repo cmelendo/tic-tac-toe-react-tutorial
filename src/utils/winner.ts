@@ -85,6 +85,10 @@ export function calculateWinner({
     return value;
   }
 
+  if (squares.every((v) => v !== null)) {
+    return "Draw";
+  }
+
   return null;
 }
 

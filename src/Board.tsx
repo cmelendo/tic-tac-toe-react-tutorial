@@ -1,6 +1,6 @@
 import Square from "./Square";
 import BoardRow from "./BoardRow";
-import type { Squares, Value } from "./Game";
+import type { Squares, Winner } from "./Game";
 import { calculateWinner } from "./utils/winner";
 import { useCallback, useEffect, useState } from "react";
 
@@ -10,8 +10,8 @@ type BoardProps = {
   target: number;
   xIsNext: boolean;
   squares: Squares;
-  onPlay: (nextSquares: Squares, winner: Value) => void;
-  winner: Value;
+  onPlay: (nextSquares: Squares, winner: Winner) => void;
+  winner: Winner;
 };
 
 export default function Board({
@@ -32,7 +32,7 @@ export default function Board({
       }
       const value = xIsNext ? "X" : "O";
       const nextSquares = squares.map((v, i) => (i === index ? value : v));
-      const actualWinner = calculateWinner({
+      const actualWinner: Winner = calculateWinner({
         squares: nextSquares,
         lastMove: index,
         cols,
@@ -66,7 +66,7 @@ export default function Board({
       clearInterval(timer);
       setTimeLeft(10);
     };
-  }, [squares, winner]);
+  }, [squares, winner]); // squares no la detecta como dependencia pero es importante para reiniciar el tiempo
 
   useEffect(() => {
     if (timeLeft === 0) {
@@ -78,7 +78,11 @@ export default function Board({
   return (
     <>
       <div className="status">
-        {winner ? "Winner: " + winner : "Next player: " + (xIsNext ? "X" : "O")}
+        {winner
+          ? winner === "Draw"
+            ? "It's a draw!"
+            : "Winner: " + winner
+          : "Next player: " + (xIsNext ? "X" : "O")}
         <br />
         {!winner && <>Time left: {timeLeft}</>}
       </div>
