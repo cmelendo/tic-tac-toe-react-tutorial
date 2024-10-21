@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useState } from "react";
 
 type MenuProps = {
+  defaultActive?: string | null;
   children: ReactNode;
 };
 
@@ -14,11 +15,18 @@ export const MenuContext = createContext<MenuContext>({
   setActive: () => {},
 });
 
-export default function Menu({ children }: MenuProps) {
-  const [active, setActive] = useState<string | null>(null);
+export default function Menu({ children, defaultActive = null }: MenuProps) {
+  const [active, setActive] = useState<string | null>(defaultActive);
   return (
     <MenuContext.Provider value={{ active, setActive }}>
-      {children}
+      <ol
+        style={{
+          listStyleType: "none",
+          padding: 0,
+        }}
+      >
+        {children}
+      </ol>
     </MenuContext.Provider>
   );
 }

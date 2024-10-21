@@ -16,7 +16,7 @@ export default function MenuItem({ title, component }: MenuItemProps) {
   const titleComponent = <div onClick={handleClick}>{title}</div>;
 
   return (
-    <>
+    <li>
       {titleComponent}
       <div
         style={{
@@ -25,6 +25,6 @@ export default function MenuItem({ title, component }: MenuItemProps) {
       >
         {component}
       </div>
-    </>
+    </li>
   );
 }

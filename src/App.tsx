@@ -21,7 +21,7 @@ function App() {
   };
 
   return (
-    <Menu>
+    <Menu defaultActive="Config">
       <MenuItem
         key="config"
         title="Config"
