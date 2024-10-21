@@ -8,6 +8,7 @@ export type Config = {
   gameName: string;
   rows: number;
   cols: number;
+  target: number;
 };
 
 let gameNumber = 0;
@@ -15,9 +16,13 @@ let gameNumber = 0;
 function App() {
   const [games, setGames] = useState<Config[]>([]);
 
-  const addGame = (rows: number, cols: number) => {
+  const addGame = (rows: number, cols: number, target: number) => {
     gameNumber++;
-    setGames([...games, { rows, cols, gameName: `Game ${gameNumber}` }]);
+
+    setGames([
+      ...games,
+      { rows, cols, target, gameName: `Game ${gameNumber}` },
+    ]);
   };
 
   return (
@@ -31,7 +36,9 @@ function App() {
         <MenuItem
           key={game.gameName}
           title={game.gameName}
-          component={<Game rows={game.rows} cols={game.cols} />}
+          component={
+            <Game rows={game.rows} cols={game.cols} target={game.target} />
+          }
         />
       ))}
     </Menu>

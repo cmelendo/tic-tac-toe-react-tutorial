@@ -1,10 +1,13 @@
 import Square from "./Square";
 import BoardRow from "./BoardRow";
 import type { Squares } from "./Game";
+import { useState } from "react";
+import { calculateWinner } from "./utils/winner";
 
 type BoardProps = {
   rows: number;
   cols: number;
+  target: number;
   xIsNext: boolean;
   squares: Squares;
   onPlay: (nextSquares: Squares) => void;
@@ -13,11 +16,12 @@ type BoardProps = {
 export default function Board({
   rows,
   cols,
+  target,
   xIsNext,
   squares,
   onPlay,
 }: BoardProps) {
-  const winner = calculateWinner(squares);
+  const [winner, setWinner] = useState<null | string>(null);
 
   function handleClick(index: number) {
     if (squares[index] || winner) {
@@ -25,6 +29,14 @@ export default function Board({
     }
     const value = xIsNext ? "X" : "O";
     const nextSquares = squares.map((v, i) => (i === index ? value : v));
+    setWinner(
+      calculateWinner({
+        squares: nextSquares,
+        lastMove: index,
+        cols,
+        target,
+      })
+    );
     onPlay(nextSquares);
   }
 
@@ -53,25 +65,4 @@ export default function Board({
         ))}
     </>
   );
-}
-
-function calculateWinner(squares: Squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
-    }
-  }
-  return null;
 }

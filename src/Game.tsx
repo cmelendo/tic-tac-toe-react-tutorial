@@ -7,9 +7,10 @@ export type Squares = Value[];
 type GameProps = {
   rows: number;
   cols: number;
+  target: number;
 };
 
-export default function Game({ rows, cols }: GameProps) {
+export default function Game({ rows, cols, target }: GameProps) {
   const [history, setHistory] = useState<Squares[]>([
     Array(rows * cols).fill(null),
   ]);
@@ -50,6 +51,7 @@ export default function Game({ rows, cols }: GameProps) {
         <Board
           rows={rows}
           cols={cols}
+          target={target}
           xIsNext={xIsNext}
           squares={currentSquares}
           onPlay={handlePlay}
