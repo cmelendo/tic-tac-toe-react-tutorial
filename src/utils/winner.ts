@@ -24,7 +24,9 @@ export function calculateWinner({
   const isSameRow = (move: number) => Math.floor(move / cols) === row;
   const isSameCol = (move: number) => move % cols === col;
   const isSameDiagonal = (move: number) =>
-    Math.abs(Math.floor(move / cols) - row) === Math.abs((move % cols) - col);
+    Math.floor(move / cols) - row === (move % cols) - col;
+  const isSameAntiDiagonal = (move: number) =>
+    Math.floor(move / cols) - row === -((move % cols) - col);
 
   const nextHorizontal = (move: number) => move + 1;
   const prevHorizontal = (move: number) => move - 1;
@@ -76,7 +78,7 @@ export function calculateWinner({
     lastMove,
     nextAntiDiagonal,
     prevAntiDiagonal,
-    isSameDiagonal
+    isSameAntiDiagonal
   );
 
   if (antiDiagonal >= target) {
