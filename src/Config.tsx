@@ -22,7 +22,7 @@ export default function Config({ addGame }: ConfigProps) {
   function isValidConfig() {
     const rows = parseInt(rowsRef.current!.value, 10);
     const cols = parseInt(colsRef.current!.value, 10);
-    const target = parseInt(colsRef.current!.value, 10);
+    const target = parseInt(targetRef.current!.value, 10);
     return !isNaN(rows) && !isNaN(cols) && !isNaN(target);
   }
 
