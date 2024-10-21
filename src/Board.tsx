@@ -2,7 +2,7 @@ import Square from "./Square";
 import BoardRow from "./BoardRow";
 import type { Squares, Value } from "./Game";
 import { calculateWinner } from "./utils/winner";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type BoardProps = {
   rows: number;
@@ -25,39 +25,62 @@ export default function Board({
 }: BoardProps) {
   const [timeLeft, setTimeLeft] = useState(10);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prevTimeLeft) => {
-        if (prevTimeLeft === 0) {
-          return 10;
-        }
-        return prevTimeLeft - 1;
+  const makeMove = useCallback(
+    (index: number) => {
+      if (squares[index] || winner) {
+        return;
+      }
+      const value = xIsNext ? "X" : "O";
+      const nextSquares = squares.map((v, i) => (i === index ? value : v));
+      const actualWinner = calculateWinner({
+        squares: nextSquares,
+        lastMove: index,
+        cols,
+        target,
       });
-      return () => clearInterval(timer);
-    }, 1000);
-  }, [squares]);
+      onPlay(nextSquares, actualWinner);
+    },
+    [cols, onPlay, squares, target, winner, xIsNext]
+  );
 
-  function handleClick(index: number) {
-    if (squares[index] || winner) {
+  const randomMove = useCallback(() => {
+    const emptySquares = squares
+      .map((v, i) => (v === null ? i : -1))
+      .filter((v) => v !== -1);
+    const randomIndex =
+      emptySquares[Math.floor(Math.random() * emptySquares.length)];
+
+    return makeMove(randomIndex);
+  }, [squares, makeMove]);
+
+  useEffect(() => {
+    if (winner) {
       return;
     }
-    const value = xIsNext ? "X" : "O";
-    const nextSquares = squares.map((v, i) => (i === index ? value : v));
-    const actualWinner = calculateWinner({
-      squares: nextSquares,
-      lastMove: index,
-      cols,
-      target,
-    });
-    onPlay(nextSquares, actualWinner);
-  }
+    const timer = setInterval(() => {
+      setTimeLeft((prevTimeLeft) => {
+        return prevTimeLeft - 1;
+      });
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+      setTimeLeft(10);
+    };
+  }, [squares, winner]);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      setTimeLeft(10);
+      randomMove();
+    }
+  }, [timeLeft, randomMove]);
 
   return (
     <>
       <div className="status">
         {winner ? "Winner: " + winner : "Next player: " + (xIsNext ? "X" : "O")}
         <br />
-        Time left: {timeLeft}
+        {!winner && <>Time left: {timeLeft}</>}
       </div>
       {Array(rows)
         .fill(null)
@@ -71,7 +94,7 @@ export default function Board({
                   <Square
                     key={key}
                     value={squares[key]}
-                    onSquareClick={() => handleClick(key)}
+                    onSquareClick={() => makeMove(key)}
                   />
                 );
               })}
