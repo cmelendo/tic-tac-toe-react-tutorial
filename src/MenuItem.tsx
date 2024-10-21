@@ -15,14 +15,16 @@ export default function MenuItem({ title, component }: MenuItemProps) {
 
   const titleComponent = <div onClick={handleClick}>{title}</div>;
 
-  if (active === title) {
-    return (
-      <>
-        {titleComponent}
+  return (
+    <>
+      {titleComponent}
+      <div
+        style={{
+          display: active === title ? "block" : "none",
+        }}
+      >
         {component}
-      </>
-    );
-  } else {
-    return <>{titleComponent}</>;
-  }
+      </div>
+    </>
+  );
 }
