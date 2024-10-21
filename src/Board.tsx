@@ -1,18 +1,22 @@
-import { useState } from "react";
 import Square from "./Square";
 import BoardRow from "./BoardRow";
+import type { Squares } from "./Game";
 
-export type Value = "X" | "O" | null;
+type BoardProps = {
+  rows: number;
+  cols: number;
+  xIsNext: boolean;
+  squares: Squares;
+  onPlay: (nextSquares: Squares) => void;
+};
 
-const rows = 3;
-const cols = 3;
-
-export default function Board() {
-  const [xIsNext, setXIsNext] = useState(true);
-  const [squares, setSquares] = useState<Value[]>(
-    Array(rows * cols).fill(null)
-  );
-
+export default function Board({
+  rows,
+  cols,
+  xIsNext,
+  squares,
+  onPlay,
+}: BoardProps) {
   const winner = calculateWinner(squares);
 
   function handleClick(index: number) {
@@ -20,8 +24,8 @@ export default function Board() {
       return;
     }
     const value = xIsNext ? "X" : "O";
-    setSquares(squares.map((v, i) => (i === index ? value : v)));
-    setXIsNext(!xIsNext);
+    const nextSquares = squares.map((v, i) => (i === index ? value : v));
+    onPlay(nextSquares);
   }
 
   return (
@@ -51,7 +55,7 @@ export default function Board() {
   );
 }
 
-function calculateWinner(squares: Value[]) {
+function calculateWinner(squares: Squares) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
