@@ -1,5 +1,8 @@
 import { ReactNode, useState } from "react";
 import Board from "./Board";
+import Menu from "./Menu";
+import MenuItem from "./MenuItem";
+import Config from "./Config";
 
 export type Value = "X" | "O" | null;
 export type Squares = Value[];
@@ -42,7 +45,7 @@ export default function Game() {
   const currentSquares = history[currentMove];
   const xIsNext = currentMove % 2 === 0;
 
-  return (
+  const game = (
     <div className="game">
       <div className="game-board">
         <Board
@@ -57,5 +60,12 @@ export default function Game() {
         <ol>{moves}</ol>
       </div>
     </div>
+  );
+
+  return (
+    <Menu>
+      <MenuItem title="Config" component={<Config />} />
+      <MenuItem title="Game" component={game} />
+    </Menu>
   );
 }
