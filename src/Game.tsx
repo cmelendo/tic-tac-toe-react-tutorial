@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import Board from "./Board";
 
 export type Value = "X" | "O" | null;
@@ -8,17 +8,39 @@ const rows = 3;
 const cols = 3;
 
 export default function Game() {
-  const [xIsNext, setXIsNext] = useState(true);
   const [history, setHistory] = useState<Squares[]>([
     Array(rows * cols).fill(null),
   ]);
+  const [currentMove, setCurrentMove] = useState(0);
 
-  function handlePlay(nextSquares: Squares) {
-    setHistory([...history, nextSquares]);
-    setXIsNext(!xIsNext);
+  const moves: ReactNode[] = [];
+
+  for (let move = 0; move < history.length; move++) {
+    let description;
+    if (move > 0) {
+      description = "Go to move #" + move;
+    } else {
+      description = "Go to game start";
+    }
+    moves.push(
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
   }
 
-  const currentSquares = history[history.length - 1];
+  function jumpTo(nextMove: number) {
+    setCurrentMove(nextMove);
+  }
+
+  function handlePlay(nextSquares: Squares) {
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
+  }
+
+  const currentSquares = history[currentMove];
+  const xIsNext = currentMove % 2 === 0;
 
   return (
     <div className="game">
@@ -32,7 +54,7 @@ export default function Game() {
         />
       </div>
       <div className="game-info">
-        <ol>{/*TODO*/}</ol>
+        <ol>{moves}</ol>
       </div>
     </div>
   );
