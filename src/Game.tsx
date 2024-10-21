@@ -3,6 +3,10 @@ import Board from "./Board";
 
 export type Value = "X" | "O" | null;
 export type Squares = Value[];
+type History = {
+  squares: Squares;
+  winner: Value;
+}[];
 
 type GameProps = {
   rows: number;
@@ -11,8 +15,11 @@ type GameProps = {
 };
 
 export default function Game({ rows, cols, target }: GameProps) {
-  const [history, setHistory] = useState<Squares[]>([
-    Array(rows * cols).fill(null),
+  const [history, setHistory] = useState<History>([
+    {
+      squares: Array(rows * cols).fill(null),
+      winner: null,
+    },
   ]);
   const [currentMove, setCurrentMove] = useState(0);
 
@@ -36,13 +43,16 @@ export default function Game({ rows, cols, target }: GameProps) {
     setCurrentMove(nextMove);
   }
 
-  function handlePlay(nextSquares: Squares) {
-    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+  function handlePlay(nextSquares: Squares, winner: Value) {
+    const nextHistory = [
+      ...history.slice(0, currentMove + 1),
+      { squares: nextSquares, winner },
+    ];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
   }
 
-  const currentSquares = history[currentMove];
+  const { squares: currentSquares, winner } = history[currentMove];
   const xIsNext = currentMove % 2 === 0;
 
   return (
@@ -54,6 +64,7 @@ export default function Game({ rows, cols, target }: GameProps) {
           target={target}
           xIsNext={xIsNext}
           squares={currentSquares}
+          winner={winner}
           onPlay={handlePlay}
         />
       </div>
