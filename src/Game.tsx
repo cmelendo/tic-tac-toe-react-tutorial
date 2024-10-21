@@ -4,10 +4,12 @@ import Board from "./Board";
 export type Value = "X" | "O" | null;
 export type Squares = Value[];
 
-const rows = 3;
-const cols = 3;
+type GameProps = {
+  rows: number;
+  cols: number;
+};
 
-export default function Game() {
+export default function Game({ rows, cols }: GameProps) {
   const [history, setHistory] = useState<Squares[]>([
     Array(rows * cols).fill(null),
   ]);

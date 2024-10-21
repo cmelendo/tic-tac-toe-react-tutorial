@@ -1,8 +1,12 @@
-import { useState } from "react";
+import type { Config } from "./App";
 
-export default function Config() {
-  const [rows, setRows] = useState(3);
-  const [cols, setCols] = useState(3);
+type ConfigProps = {
+  config: Config;
+  setConfig: (config: Config) => void;
+};
+
+export default function Config({ config, setConfig }: ConfigProps) {
+  const { rows, cols } = config;
   return (
     <>
       <label>
@@ -10,7 +14,9 @@ export default function Config() {
         <input
           type="number"
           value={rows}
-          onChange={(event) => setRows(parseInt(event.target.value, 10))}
+          onChange={(event) =>
+            setConfig({ rows: parseInt(event.target.value, 10), cols })
+          }
         />
       </label>
       <label>
@@ -18,7 +24,9 @@ export default function Config() {
         <input
           type="number"
           value={cols}
-          onChange={(event) => setCols(parseInt(event.target.value, 10))}
+          onChange={(event) =>
+            setConfig({ rows, cols: parseInt(event.target.value, 10) })
+          }
         />
       </label>
     </>
