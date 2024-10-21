@@ -3,10 +3,11 @@ import type { Config } from "./App";
 type ConfigProps = {
   config: Config;
   setConfig: (config: Config) => void;
+  addGame: () => void;
 };
 
-export default function Config({ config, setConfig }: ConfigProps) {
-  const { rows, cols } = config;
+export default function Config({ config, setConfig, addGame }: ConfigProps) {
+  const { rows, cols, gameName } = config;
   return (
     <>
       <label>
@@ -15,7 +16,11 @@ export default function Config({ config, setConfig }: ConfigProps) {
           type="number"
           value={rows}
           onChange={(event) =>
-            setConfig({ rows: parseInt(event.target.value, 10), cols })
+            setConfig({
+              gameName,
+              rows: parseInt(event.target.value, 10),
+              cols,
+            })
           }
         />
       </label>
@@ -25,10 +30,15 @@ export default function Config({ config, setConfig }: ConfigProps) {
           type="number"
           value={cols}
           onChange={(event) =>
-            setConfig({ rows, cols: parseInt(event.target.value, 10) })
+            setConfig({
+              gameName,
+              rows,
+              cols: parseInt(event.target.value, 10),
+            })
           }
         />
       </label>
+      <button onClick={addGame}>Add game</button>
     </>
   );
 }
